@@ -31,6 +31,6 @@
   },
   "config": {},
   "dependencies": {},
-  "xpack": {}, 
-  "homepage": "https://github.com/micro-os-plus/drtm#readme"
+  "xpack": {},
+  "homepage": "https://github.com/micro-os-plus/drtm"
 }

@@ -1,0 +1,36 @@
+{
+  "name": "@ilg/drtm",
+  "version": "0.0.1",
+  "description": "An xPack with the Debug Run-Time Metadata library",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micro-os-plus/drtm.git"
+  },
+  "keywords": [
+    "xpack",
+    "drtm",
+    "debug",
+    "run-time",
+    "metadata",
+    "micro-os-plus",
+    "c++",
+    "gdb",
+    "server"
+  ],
+  "author": {
+    "name": "Liviu Ionescu",
+    "email": "ilg@livius.net",
+    "url": "http://liviusdotnet.wordpress.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/micro-os-plus/drtm/issues"
+  },
+  "config": {},
+  "dependencies": {},
+  "xpack": {}, 
+  "homepage": "https://github.com/micro-os-plus/drtm#readme"
+}

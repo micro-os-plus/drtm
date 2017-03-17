@@ -1,5 +1,5 @@
 /*
- * DO NOT EDIT! GENERATED FROM "templates/version.h".
+ * DO NOT EDIT! GENERATED FROM "templates/version.liquid.h".
  *
  * This file is part of the µOS++ distribution.
  *   (https://github.com/micro-os-plus)
@@ -32,6 +32,6 @@
 
 #define XPACK_ILG_DRTM_VERSION_MAJOR 0
 #define XPACK_ILG_DRTM_VERSION_MINOR 0
-#define XPACK_ILG_DRTM_VERSION_PATCH 3
+#define XPACK_ILG_DRTM_VERSION_PATCH 4
 
 #endif /* ILG_DRTM_VERSION_H_ */

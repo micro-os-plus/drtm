@@ -25,11 +25,18 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef ILG_DRTM_VERSION_H_
-#define ILG_DRTM_VERSION_H_
+#include <drtm/version.h>
 
-#define XPACK_ILG_DRTM_VERSION_MAJOR 0
-#define XPACK_ILG_DRTM_VERSION_MINOR 0
-#define XPACK_ILG_DRTM_VERSION_PATCH 2
-
-#endif /* ILG_DRTM_VERSION_H_ */
+struct
+{
+  int major;
+  int minor;
+  int patch;
+} ilg_drtm_version =
+  {
+  //
+      XPACK_ILG_DRTM_VERSION_MAJOR, //
+      XPACK_ILG_DRTM_VERSION_MINOR, //
+      XPACK_ILG_DRTM_VERSION_PATCH
+  /**/
+  };

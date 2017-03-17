@@ -35,4 +35,4 @@
 #define XPACK_{{ macro_name }}_VERSION_MINOR {{ xpack.version.minor }}
 #define XPACK_{{ macro_name }}_VERSION_PATCH {{ xpack.version.patch }}
 
-#endif /* {{xpack_name }}_VERSION_H_ */
+#endif /* {{ macro_name }}_VERSION_H_ */

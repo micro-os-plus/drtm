@@ -31,24 +31,28 @@
 #if defined(__cplusplus)
 
 #include <drtm/types.h>
-#include <stdio.h>
+#include <drtm/metadata.h>
+#include <drtm/threads.h>
+#include <drtm/run-time-data.h>
 
+#include <stdio.h>
 #include <cassert>
 #include <cstring>
 
 namespace drtm
 {
 
-  template<typename B, typename M, typename T, typename R, typename A>
+  template<typename B, typename A>
     class frontend
     {
     public:
 
       using backend_type = B;
-      using metadata_type = M;
-      using threads_type = T;
-      using rtd_type = R;
       using allocator_type = A;
+
+      using metadata_type = class metadata<B>;
+      using threads_type = class threads<B, A>;
+      using rtd_type = class run_time_data<B, A>;
 
       using thread_type = typename threads_type::thread_type;
       using thread_id_t = typename thread_type::thread_id_t;

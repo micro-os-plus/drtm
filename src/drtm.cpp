@@ -139,8 +139,8 @@ namespace drtm
         .offsets = cortex_m4_stack_offsets, //
         .offsets_size = sizeof(cortex_m4_stack_offsets)
             / sizeof(cortex_m4_stack_offsets[0]),
-    //
-      };
+    /**/
+    };
 
 // FP stack context, 50 words.
 // Offsets in words, from SP up.
@@ -323,21 +323,21 @@ namespace drtm
         .offsets = cortex_m4_vfp_stack_offsets, //
         .offsets_size = sizeof(cortex_m4_vfp_stack_offsets)
             / sizeof(cortex_m4_vfp_stack_offsets[0]),
-    //
-      };
+    /**/
+    };
 
   rtos_t rtos =
     {
     //
         .stack_info = &cortex_m4_stack_info, //
         .stack_info_vfp = &cortex_m4_vfp_stack_info
-    //
-      };
+    /**/
+    };
 
   const char* thread_states[6] =
     {
-    /**/
-    "Undefined", "Ready", "Running", "Suspended", "Terminated", "Destroyed"
+    //
+        "Undefined", "Ready", "Running", "Suspended", "Terminated", "Destroyed"
     /**/
     };
 

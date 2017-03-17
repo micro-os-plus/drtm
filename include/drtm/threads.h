@@ -318,15 +318,16 @@ namespace drtm
    * @brief A class template to manage a collection (an array)
    * of pointers o threads.
    */
-  template<typename B, typename T, typename A>
+  template<typename B, typename A>
     class threads
     {
 
     public:
 
       using backend_type = B;
-      using thread_type = T;
       using allocator_type = A;
+
+      using thread_type = class thread<B, A>;
 
       // Make a new allocator, for threads.
       using thread_allocator_type =
@@ -340,25 +341,25 @@ namespace drtm
       using vector_allocator_type =
       typename std::allocator_traits<allocator_type>::template rebind_alloc<thread_type*>;
 
-      using threads_type = class std::vector<thread_type*, vector_allocator_type>;
+      using collection_type = class std::vector<thread_type*, vector_allocator_type>;
 
       using thread_id_t = typename thread_type::thread_id_t;
       using thread_addr_t = typename thread_type::thread_addr_t;
 
       // Standard types, inherited from container (vector).
 
-      using value_type = typename threads_type::value_type;
-      // using allocator_type = typename threads_type::allocator_type;
-      using size_type = typename threads_type::size_type;
-      using difference_type = typename threads_type::difference_type;
-      using reference = typename threads_type::reference;
-      using const_reference = typename threads_type::const_reference;
-      using pointer = typename threads_type::pointer;
-      using const_pointer = typename threads_type::const_pointer;
-      using iterator = typename threads_type::iterator;
-      using const_iterator = typename threads_type::const_iterator;
-      using reverse_iterator = typename threads_type::reverse_iterator;
-      using const_reverse_iterator = typename threads_type::const_reverse_iterator;
+      using value_type = typename collection_type::value_type;
+      // using allocator_type = typename collection_type::allocator_type;
+      using size_type = typename collection_type::size_type;
+      using difference_type = typename collection_type::difference_type;
+      using reference = typename collection_type::reference;
+      using const_reference = typename collection_type::const_reference;
+      using pointer = typename collection_type::pointer;
+      using const_pointer = typename collection_type::const_pointer;
+      using iterator = typename collection_type::iterator;
+      using const_iterator = typename collection_type::const_iterator;
+      using reverse_iterator = typename collection_type::reverse_iterator;
+      using const_reverse_iterator = typename collection_type::const_reverse_iterator;
 
     public:
 
@@ -533,8 +534,9 @@ namespace drtm
 
       thread_type* current_ = nullptr;
 
-      // Vector of pointers to separately allocated thread objects.
-      threads_type threads_
+      // A collection (vector) of pointers to
+      // separately allocated thread objects.
+      collection_type threads_
         { (vector_allocator_type&) allocator_ };
 
     };

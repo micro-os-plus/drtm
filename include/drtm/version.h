@@ -1,4 +1,6 @@
 /*
+ * DO NOT EDIT! GENERATED FROM "templates/version.h".
+ *
  * This file is part of the µOS++ distribution.
  *   (https://github.com/micro-os-plus)
  * Copyright (c) 2017 Liviu Ionescu.
@@ -30,6 +32,6 @@
 
 #define XPACK_ILG_DRTM_VERSION_MAJOR 0
 #define XPACK_ILG_DRTM_VERSION_MINOR 0
-#define XPACK_ILG_DRTM_VERSION_PATCH 2
+#define XPACK_ILG_DRTM_VERSION_PATCH 3
 
 #endif /* ILG_DRTM_VERSION_H_ */

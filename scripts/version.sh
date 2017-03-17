@@ -19,17 +19,18 @@ IFS=$'\n\t'
 
 # ------------------------------------------------------------------
 
-# This is a temporaty solution, until a full template substitution
-# command using liquid will be available.
+# This is a temporary solution, until a full template substitution
+# command using liquid tags and filters will be available.
 # For now the accepted syntax is very strict, to simplify the sed expressions.
 
-template_source="templates/version.h"
+template_source="templates/version.liquid.h"
 template_destination="include/drtm/version.h"
 
+# This simple code does not support prereleases.
 xpack_name=$(echo ${npm_package_name} | sed -e "s/@//" | tr '[:lower:]' '[:upper:]' | tr '/-' '_' )
-xpack_version_major=$(echo ${npm_package_version} | sed -e "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\1/") 
-xpack_version_minor=$(echo ${npm_package_version} | sed -e "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\2/")
-xpack_version_patch=$(echo ${npm_package_version} | sed -e "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\3/")
+xpack_version_major=$(echo ${npm_package_version} | sed -e "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\).*/\1/") 
+xpack_version_minor=$(echo ${npm_package_version} | sed -e "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\).*/\2/")
+xpack_version_patch=$(echo ${npm_package_version} | sed -e "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\).*/\3/")
 
 mkdir -p "$(dirname ${template_destination})"
 sed \

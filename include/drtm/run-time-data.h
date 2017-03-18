@@ -60,7 +60,7 @@ namespace drtm
       using list_node_addr_t = target_addr_t;
 
       // Target iterator, an object that includes a single target pointer.
-      using iterator_t = target_addr_t;
+      using iterator = target_addr_t;
 
       // Make a new allocator, for characters.
       using char_allocator_type =
@@ -129,7 +129,7 @@ namespace drtm
       void
       update_threads (void)
       {
-        threads_.clear();
+        threads_.clear ();
         iterate_threads (0, 0);
 
         update_current_thread ();
@@ -145,8 +145,8 @@ namespace drtm
         printf ("%s(0x%08X, %u)\n", __func__, ta, depth);
 #endif /* defined(DEBUG) */
 
-        iterator_t it = children_threads_iter_begin (ta);
-        iterator_t end = children_threads_iter_end (ta);
+        iterator it = children_threads_iter_begin (ta);
+        iterator end = children_threads_iter_end (ta);
 
         while (it != end)
           {
@@ -373,7 +373,7 @@ namespace drtm
        *
        * @return An iterator pointing to the beginning of the list.
        */
-      iterator_t
+      iterator
       children_threads_iter_begin (thread_addr_t ta)
       {
 #if defined(DEBUG) && defined(DEBUG_LISTS)
@@ -381,7 +381,7 @@ namespace drtm
 #endif /* defined(DEBUG) */
 
         list_node_addr_t list_node_addr = children_threads_get_list (ta);
-        iterator_t it;
+        iterator it;
         int ret;
         ret = backend_.read_long (
             list_node_addr + metadata_.list_links.next_offset, &it);
@@ -407,14 +407,14 @@ namespace drtm
        *
        * @return An iterator pointing to the end of the list.
        */
-      iterator_t
+      iterator
       children_threads_iter_end (thread_addr_t ta)
       {
 #if defined(DEBUG) && defined(DEBUG_LISTS)
         printf ("%s(0x%08X)\n", __func__, ta);
 #endif /* defined(DEBUG) */
 
-        iterator_t it = children_threads_get_list (ta);
+        iterator it = children_threads_get_list (ta);
 
 #if defined(DEBUG) && defined(DEBUG_LISTS)
         printf ("%s(0x%08X)=0x%08X\n", __func__, ta, it);
@@ -436,7 +436,7 @@ namespace drtm
        * @return The thread target address.
        */
       thread_addr_t
-      children_threads_iter_get (iterator_t it)
+      children_threads_iter_get (iterator it)
       {
 #if defined(DEBUG) && defined(DEBUG_LISTS)
         printf ("%s(0x%08X)\n", __func__, it);
@@ -461,14 +461,14 @@ namespace drtm
        *
        * @return An iterator pointing to the next thread.
        */
-      iterator_t
-      children_threads_iter_next (iterator_t it)
+      iterator
+      children_threads_iter_next (iterator it)
       {
 #if defined(DEBUG) && defined(DEBUG_LISTS)
         printf ("%s(0x%08X)\n", __func__, it);
 #endif /* defined(DEBUG) */
 
-        iterator_t next = 0;
+        iterator next = 0;
         int ret;
         ret = backend_.read_long (it + metadata_.list_links.next_offset, &next);
         if (ret < 0)

@@ -113,15 +113,7 @@ namespace drtm
        */
       ~thread ()
       {
-        // Protect against multiple invocations.
-        if (name != nullptr)
-          {
-            std::allocator_traits<char_allocator_type>::deallocate (
-                reinterpret_cast<char_allocator_type&> (allocator_), name,
-                std::strlen (name));
-
-            name = nullptr;
-          }
+        ;
       }
 
     public:
@@ -259,7 +251,6 @@ namespace drtm
 
         const stack_info_t* si = rtos.stack_info;
 
-        // TODO: allocate the stack during thread creation
         assert(sizeof(stack.context) >= si->in_registers * register_size_bytes);
 
         // Registers are read one byte at a time, in ascending memory order.
@@ -294,7 +285,7 @@ namespace drtm
 
     public:
 
-      char* name = nullptr;
+      char name[name_max_size_bytes] = "";
       uint8_t prio_assigned = 0;
       uint8_t prio_inherited = 0;
       uint8_t state = 0;

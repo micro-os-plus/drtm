@@ -160,10 +160,7 @@ namespace drtm
             // This will also set the ID.
             th->addr (thread_addr);
 
-            // Copy the name, byte by byte. A large array copy is risky, since the
-            // thread might be allocated right at the end of RAM, and
-            // the copy might try to access past the limit.
-            char tmp_name[thread_type::name_max_size_bytes];
+            // Get the address of the name string.
             int ret;
             addr_t name_addr;
             ret = backend_.read_long (
@@ -173,31 +170,37 @@ namespace drtm
                 backend_.output_error ("Could not read 'thread.name*'.\n");
               }
 
-            addr_t addr = name_addr;
-            char* p = tmp_name;
-            int count = 0;
+            addr_t addr;
             uint8_t b;
-            while (true)
+
+            // Copy the name, byte by byte. A large array copy is risky, since the
+            // thread might be allocated right at the end of RAM, and
+            // the copy might try to access past the limit.
+            if (name_addr != 0)
               {
-                ret = backend_.read_byte (addr, &b);
-                if (ret < 0)
+                addr = name_addr;
+                char* p = &th->name[0];
+                int count = 0;
+                while (count < thread_type::name_max_size_bytes - 1)
                   {
-                    backend_.output_error ("Could not read 'thread.name'.\n");
+                    ret = backend_.read_byte (addr, &b);
+                    if (ret < 0)
+                      {
+                        backend_.output_error (
+                            "Could not read 'thread.name'.\n");
+                        break;
+                      }
+                    *p = b;
+                    ++p;
+                    ++addr;
+                    ++count;
+                    if (b == '\0')
+                      {
+                        break;
+                      }
                   }
-                *p = b;
-                ++p;
-                ++addr;
-                ++count;
-                if (b == '\0' || count >= sizeof(tmp_name))
-                  {
-                    break;
-                  }
+                *p = '\0'; // Be sure the string is terminated.
               }
-
-            th->name = std::allocator_traits<char_allocator_type>::allocate (
-                reinterpret_cast<char_allocator_type&> (allocator_), count);
-
-            strcpy (th->name, tmp_name);
 
             addr = thread_addr + metadata_.thread.prio_assigned_offset;
             ret = backend_.read_byte (addr, &b);

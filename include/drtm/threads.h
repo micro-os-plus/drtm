@@ -71,10 +71,6 @@ namespace drtm
 
       using thread_id_t = uint32_t;
 
-      // Make a new allocator, for characters.
-      using char_allocator_type =
-      typename std::allocator_traits<allocator_type>::template rebind_alloc<char>;
-
     public:
 
       // Thread ID when the scheduler is not started.
@@ -97,7 +93,11 @@ namespace drtm
           allocator_
             { allocator }
       {
-        ;
+#if defined(DEBUG)
+        printf ("%s(%p, %p) @%p\n", __func__, &backend, &allocator, this);
+#endif /* defined(DEBUG) */
+
+        clear ();
       }
 
       // The rule of five.
@@ -113,7 +113,9 @@ namespace drtm
        */
       ~thread ()
       {
-        ;
+#if defined(DEBUG)
+        printf ("%s() @%p\n", __func__, this);
+#endif /* defined(DEBUG) */
       }
 
     public:
@@ -139,7 +141,6 @@ namespace drtm
                                      addr_);
           }
         id_ = (addr_ >> 2);
-
       }
 
       inline thread_id_t
@@ -152,6 +153,27 @@ namespace drtm
       id (thread_id_t tid)
       {
         id_ = tid;
+      }
+
+      void
+      clear (void)
+      {
+#if defined(DEBUG)
+        printf ("%s() @%p\n", __func__, this);
+#endif /* defined(DEBUG) */
+
+        // DO NOT clear the entire object, this will destroy references;
+        // instead, clear individual members.
+        addr_ = 0;
+        id_ = 0;
+
+        name[0] = '\0';
+        prio_assigned = 0;
+        prio_inherited = 0;
+        state = 0;
+
+        // Clearing the entire stack is ok, no references inside.
+        std::memset (&stack, 0, sizeof(stack));
       }
 
       /**
@@ -249,6 +271,10 @@ namespace drtm
             return;
           }
 
+#if defined(DEBUG)
+        printf ("%s() @%p\n", __func__, this);
+#endif /* defined(DEBUG) */
+
         const stack_info_t* si = rtos.stack_info;
 
         assert(sizeof(stack.context) >= si->in_registers * register_size_bytes);
@@ -290,13 +316,12 @@ namespace drtm
       uint8_t prio_inherited = 0;
       uint8_t state = 0;
 
-      struct
+      struct stack_s
       {
         addr_t addr;
         bool has_registers;
         bool is_floating_point;
         const stack_info_t* info;
-        // TODO: allocate the stack during thread creation.
         uint8_t context[STACK_CONTEXT_REGISTERS_SIZE_WORDS * register_size_bytes];
         uint8_t sp_addr[register_size_bytes];
       } stack;
@@ -323,10 +348,6 @@ namespace drtm
       // Make a new allocator, for threads.
       using thread_allocator_type =
       typename std::allocator_traits<allocator_type>::template rebind_alloc<thread_type>;
-
-      // Make a new allocator, for characters.
-      using char_allocator_type =
-      typename std::allocator_traits<allocator_type>::template rebind_alloc<char>;
 
       // Make a new allocator, for pointers to threads.
       using vector_allocator_type =
@@ -383,7 +404,19 @@ namespace drtm
       /**
        * @brief Destruct the threads collection object instance.
        */
-      ~threads () = default;
+      ~threads ()
+      {
+#if defined(DEBUG)
+        printf ("%s() @%p\n", __func__, this);
+#endif /* defined(DEBUG) */
+
+        for (auto* th : threads_)
+          {
+            delete_thread (th);
+          }
+
+        threads_.clear ();
+      }
 
     public:
 
@@ -392,24 +425,15 @@ namespace drtm
 
       /**
        * @brief Clear the collection of threads.
+       *
+       * @details
+       * Threads are not deallocated, but reused.
        */
       void
       clear (void)
       {
-        for (auto* th : threads_)
-          {
-            delete_thread (th);
-          }
-        threads_.clear ();
-
+        count_ = 0;
         current_ = nullptr;
-      }
-
-      inline
-      void
-      push_back (thread_type* th)
-      {
-        threads_.push_back (th);
       }
 
       /**
@@ -418,7 +442,7 @@ namespace drtm
       inline std::size_t
       size (void)
       {
-        return threads_.size ();
+        return count_;
       }
 
       /**
@@ -451,11 +475,25 @@ namespace drtm
       thread_type*
       new_thread (void)
       {
+        if (count_ < threads_.size ())
+          {
+            auto* th = threads_[count_];
+            th->clear ();
+
+            ++count_;
+
+            return th;
+          }
+
         auto* th = std::allocator_traits<thread_allocator_type>::allocate (
             reinterpret_cast<thread_allocator_type&> (allocator_), 1);
 
         // Call the constructor.
         new (th) thread_type (backend_, allocator_);
+        threads_.push_back (th);
+
+        ++count_;
+
         return th;
       }
 
@@ -524,6 +562,8 @@ namespace drtm
       allocator_type& allocator_;
 
       thread_type* current_ = nullptr;
+
+      std::size_t count_ = 0;
 
       // A collection (vector) of pointers to
       // separately allocated thread objects.

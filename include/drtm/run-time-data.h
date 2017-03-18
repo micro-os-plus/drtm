@@ -129,6 +129,7 @@ namespace drtm
       void
       update_threads (void)
       {
+        threads_.clear();
         iterate_threads (0, 0);
 
         update_current_thread ();
@@ -153,7 +154,6 @@ namespace drtm
             thread_addr_t thread_addr = children_threads_iter_get (it);
 
             thread_type* th = threads_.new_thread ();
-            threads_.push_back (th);
 
             // Remember the thread address, it is used to determine the
             // current thread.

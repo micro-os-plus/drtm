@@ -58,16 +58,6 @@ namespace drtm
     uint32_t offsets_size;
   } stack_info_t;
 
-  typedef struct rtos_s
-  {
-    const stack_info_t* stack_info;
-    const stack_info_t* stack_info_vfp;
-  } rtos_t;
-
-  extern rtos_t rtos;
-
-  extern const char* thread_states[6];
-
 // ----------------------------------------------------------------------------
 } /* namespace drtm */
 

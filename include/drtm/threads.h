@@ -275,7 +275,7 @@ namespace drtm
         printf ("%s() @%p\n", __func__, this);
 #endif /* defined(DEBUG) */
 
-        const stack_info_t* si = rtos.stack_info;
+        const stack_info_t* si = stack.info;
 
         assert(sizeof(stack.context) >= si->in_registers * register_size_bytes);
 
@@ -325,6 +325,10 @@ namespace drtm
         uint8_t context[STACK_CONTEXT_REGISTERS_SIZE_WORDS * register_size_bytes];
         uint8_t sp_addr[register_size_bytes];
       } stack;
+
+    public:
+
+      static const char* thread_states[];
 
     };
 
@@ -571,6 +575,21 @@ namespace drtm
         { (vector_allocator_type&) allocator_ };
 
     };
+
+  // --------------------------------------------------------------------------
+
+  template<typename B, typename A>
+    const char* thread<B, A>::thread_states[6] =
+      {
+      //
+          "Undefined",//
+          "Ready", //
+          "Running", //
+          "Suspended", //
+          "Terminated", //
+          "Destroyed"
+      /**/
+      };
 
 // ----------------------------------------------------------------------------
 } /* namespace drtm */

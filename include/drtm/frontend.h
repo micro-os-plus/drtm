@@ -400,13 +400,11 @@ namespace drtm
 
         // Note: The FP registers are not returned, only the main registers.
 
-        assert(rtos.stack_info != NULL);
-
 #if defined(DEBUG)
         printf ("out ");
 #endif /* defined(DEBUG) */
         char* out = out_hex_values;
-        for (int i = 0; i < rtos.stack_info->out_registers; ++i)
+        for (int i = 0; i < th->stack.info->out_registers; ++i)
           {
             out = th->output_register (i, out);
 

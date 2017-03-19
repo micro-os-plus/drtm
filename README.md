@@ -14,6 +14,10 @@ The purpose is to improve portability of debugging tools, by removing hard-coded
 npm install @ilg/drtm
 ```
 
+## `-mapcs-frame`
+
+For a proper display of the stack trace and navigation amongst stack frames, the `-mapcs-frame` option must be added to the GCC command line to generate a stack frame that is compliant with the ARM Procedure Call Standard for all functions, even if this is not strictly necessary for correct execution of the code.
+
 ## License
 
 The original content is released under the MIT License, with

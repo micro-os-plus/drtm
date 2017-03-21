@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "description": "An xPack with the Debug Run-Time Metadata library",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "bash \"${xpack_sh_path:-${HOME}/Downloads/xpack-sh.git}/xmake.sh\" tests",
     "version": "bash scripts/version.sh"
   },
   "repository": {

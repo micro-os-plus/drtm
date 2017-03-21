@@ -2,18 +2,10 @@
 
 os:
   - linux
-  # - osx
 
 # Use the new Debian 14 containers.
 dist: trusty
 sudo: false
-
-addons:
-  apt:
-    packages:
-      # - jq
-
-# language: cpp
 
 language: node_js
 node_js:
@@ -33,9 +25,8 @@ before_install:
 # Skip the install step.
 # install: true
 
-# `--develop` will pull the `develop` branch, where available.
 before_script:
-  - bash "${SCRIPT}" before_script --develop
+  - bash "${SCRIPT}" before_script
 
 script:
   - bash "${SCRIPT}" script
@@ -47,13 +38,6 @@ script:
 
 # after_failure:
 #   - bash "${SCRIPT}" after_failure
-
-# Deploy via script not functional (or not understood).
-# deploy:
-#  provider: script
-#  script: bash scripts/travis.linux.sh deploy
-#  on:
-#    branch: master
   
 # after_script:
 #   - bash "${SCRIPT}" after_script

@@ -41,6 +41,14 @@ parent="$(dirname ${script})"
 
 # -----------------------------------------------------------------------------
 
+function do_run()
+{
+  echo "\$ $@"
+  "$@"
+}
+
+# -----------------------------------------------------------------------------
+
 # Errors in this function will break the build.
 function do_before_install() {
 
@@ -48,13 +56,14 @@ function do_before_install() {
   echo "Before install; bringing in extra tools..."
 
   # ---------------------------------------------------------------------------
-
-  npm --version
+  
+  # npm --version
+  # g++ --version
 
   if [ "${TRAVIS}" == "true" ]
   then
     mkdir "${HOME}/Downloads"
-    git clone --depth 3 https://github.com/xpack/xpack-sh.git "${HOME}/Downloads/xpack-sh.git"
+    do_run git clone --depth 3 https://github.com/xpack/xpack-sh.git "${HOME}/Downloads/xpack-sh.git"
   fi
 
   return 0
@@ -75,7 +84,7 @@ function do_script() {
   echo
   echo "Performing the tests..."
 
-  npm test
+  do_run npm test
 
   echo
   echo "PASSED"

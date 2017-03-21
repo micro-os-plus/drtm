@@ -1,0 +1,59 @@
+# Travis CI configuration file.
+
+os:
+  - linux
+  # - osx
+
+# Use the new Debian 14 containers.
+dist: trusty
+sudo: false
+
+addons:
+  apt:
+    packages:
+      # - jq
+
+# language: cpp
+
+language: node_js
+node_js:
+  - "node"
+
+git:
+  # Limit the clone depth; default is 50.
+  depth: 3
+
+env:
+  global:
+    - SCRIPT="scripts/travis.sh"
+
+before_install:
+  - bash "${SCRIPT}" before_install
+
+# Skip the install step.
+# install: true
+
+# `--develop` will pull the `develop` branch, where available.
+before_script:
+  - bash "${SCRIPT}" before_script --develop
+
+script:
+  - bash "${SCRIPT}" script
+
+# Unused, kept for just in case.
+
+# after_success:
+#  - bash "${SCRIPT}" after_success
+
+# after_failure:
+#   - bash "${SCRIPT}" after_failure
+
+# Deploy via script not functional (or not understood).
+# deploy:
+#  provider: script
+#  script: bash scripts/travis.linux.sh deploy
+#  on:
+#    branch: master
+  
+# after_script:
+#   - bash "${SCRIPT}" after_script

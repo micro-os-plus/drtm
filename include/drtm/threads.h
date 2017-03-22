@@ -285,7 +285,7 @@ namespace drtm
 
 #if defined(DEBUG)
         printf ("in ");
-        for (int i = 0; i < si->in_registers * register_size_bytes; i++)
+        for (std::size_t i = 0; i < si->in_registers * register_size_bytes; i++)
           {
             if (i % 4 == 0)
               {

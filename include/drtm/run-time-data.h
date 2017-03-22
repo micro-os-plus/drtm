@@ -180,7 +180,7 @@ namespace drtm
               {
                 addr = name_addr;
                 char* p = &th->name[0];
-                int count = 0;
+                std::size_t count = 0;
                 while (count < thread_type::name_max_size_bytes - 1)
                   {
                     ret = backend_.read_byte (addr, &b);

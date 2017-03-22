@@ -404,7 +404,7 @@ namespace drtm
         printf ("out ");
 #endif /* defined(DEBUG) */
         char* out = out_hex_values;
-        for (int i = 0; i < th->stack.info->out_registers; ++i)
+        for (std::size_t i = 0; i < th->stack.info->out_registers; ++i)
           {
             out = th->output_register (i, out);
 

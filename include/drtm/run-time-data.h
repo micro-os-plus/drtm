@@ -70,14 +70,10 @@ namespace drtm
 
       run_time_data (backend_type& backend, metadata_type& metadata,
                      threads_type& threads, allocator_type& allocator) :
-          backend_
-            { backend }, //
-          metadata_
-            { metadata }, //
-          threads_
-            { threads }, //
-          allocator_
-            { allocator }
+          backend_ ( backend ), // Parenthesis used to compile with 4.8
+          metadata_ ( metadata ), //
+          threads_ ( threads ), //
+          allocator_ ( allocator )
       {
 #if defined(DEBUG)
         printf ("%s(%p, %p, %p) @%p\n", __func__, &backend, &metadata,

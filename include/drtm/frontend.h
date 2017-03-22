@@ -60,10 +60,8 @@ namespace drtm
     public:
 
       frontend (backend_type& backend, allocator_type& allocator) :
-          backend_
-            { backend }, //
-          allocator_
-            { allocator }
+          backend_ ( backend ), // Parenthesis used to compile with 4.8
+          allocator_ ( allocator )
       {
 #if defined(DEBUG)
         printf ("%s(%p, %p) @%p\n", __func__, &backend, &allocator, this);

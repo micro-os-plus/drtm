@@ -75,7 +75,7 @@ namespace drtm
        * @brief Construct the metadata collection object instance.
        */
       metadata (backend_type& backend) :
-          backend_ (backend)
+          backend_ (backend) // Parenthesis used to compile with 4.8
       {
 #if defined(DEBUG)
         printf ("%s(%p) @%p\n", __func__, &backend, this);

@@ -309,7 +309,7 @@ namespace drtm
 
     public:
 
-      char name[name_max_size_bytes] = "";
+      char name[name_max_size_bytes];
       uint8_t prio_assigned = 0;
       uint8_t prio_inherited = 0;
       uint8_t state = 0;

@@ -26,7 +26,7 @@ do_run_profile() {
   include_folders=( include samples )
      
   common_opts="-Wall"
-  artifact_name="${xpack_name}"
+  artefact_name="${test_name}"
   if [ "${profile_name}" == "debug" ]
   then
     cxx_opts="-O0 -g3 -DDEBUG ${common_opts}"
@@ -62,9 +62,9 @@ do_run_profile() {
   make all
   
   echo
-  echo "Invoking artefact: \"${artifact_name}\"..."
+  echo "Invoking artefact: \"${artefact_name}\"..."
   echo
-  ./${artifact_name}
+  ./${artefact_name}
   
   do_xmake_test_end
 }

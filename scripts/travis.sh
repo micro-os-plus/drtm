@@ -60,12 +60,6 @@ function do_before_install() {
   # npm --version
   do_run g++ --version
 
-  if [ "${TRAVIS}" == "true" ]
-  then
-    mkdir "${HOME}/Downloads"
-    do_run git clone --depth 3 https://github.com/xpack/xpack-sh.git "${HOME}/Downloads/xpack-sh.git"
-  fi
-
   return 0
 }
 

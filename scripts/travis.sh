@@ -58,7 +58,7 @@ function do_before_install() {
   # ---------------------------------------------------------------------------
   
   # npm --version
-  # g++ --version
+  do_run g++ --version
 
   if [ "${TRAVIS}" == "true" ]
   then

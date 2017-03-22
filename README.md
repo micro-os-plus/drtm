@@ -16,7 +16,23 @@ npm install @ilg/drtm
 
 ## `-mapcs-frame`
 
-For a proper display of the stack trace and navigation amongst stack frames, the `-mapcs-frame` option must be added to the GCC command line to generate a stack frame that is compliant with the ARM Procedure Call Standard for all functions, even if this is not strictly necessary for correct execution of the code.
+For a proper display of the stack trace and navigation amongst stack frames, the `-mapcs-frame` option must be added to the GCC command line used to build the embedded application. The purpose is to always generate a stack frame that is compliant with the ARM Procedure Call Standard for all functions, even if this is not strictly necessary for correct execution of the code.
+
+Without this option, GDB will randomly, but quite often, display unrealistic stack traces, possibly with illegal addresses, totally useless in a debug session.
+
+## Prerequisites
+
+The source code require a modern C++ compiler, preferably GCC 5 or higher, but was also compiled with GCC 4.8. Be sure `-std=c++1y` or higher is used when compiling source files that include these templates.
+
+## Templates only, no source files
+
+The DRTM library is distributed as a set of C++ templates, that must be instantiated with classes that define the backend and memory allocator specific for the application.
+
+For an example how to use it, please take a look at the `test/sample/main.cpp` file.
+
+## Integration with C projects
+
+Although written in C++, this library can be easily be integrated into a C project, using a C wrapper.
 
 ## License
 

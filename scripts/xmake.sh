@@ -34,20 +34,13 @@ parent="$(dirname ${script})"
 # to build and test xPacks.
 # -----------------------------------------------------------------------------
 
-function do_run()
-{
-  echo "\$ $@"
-  "$@"
-}
-
-# -----------------------------------------------------------------------------
-
 xpack_helper_path="${HOME}/Downloads/xpack-sh.git/xpack-helper.sh"
 
 if [ ! -f "${xpack_helper_path}" ]
 then
   mkdir -p "${HOME}/Downloads"
-  do_run git clone --depth 3 https://github.com/xpack/xpack-sh.git "${HOME}/Downloads/xpack-sh.git"
+  echo "Installing xpack scripts from https://github.com/xpack/xpack-sh.git..."
+  git clone --depth 3 https://github.com/xpack/xpack-sh.git "${HOME}/Downloads/xpack-sh.git"
 fi
 
 source  "${xpack_helper_path}"

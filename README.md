@@ -30,7 +30,7 @@ Basically, a thread-aware server should provide:
 
 Not related to a specific thread aware implementation or GDB server, in all cases it is recommended to have the debugged application built with the proper stack frames.
 
-### `-mapcs-frame`
+### Compiler option `-mapcs-frame`
 
 When using `arm-none-eabi-gdb`, for a proper display of the stack trace and navigation amongst stack frames, the `-mapcs-frame` option must be added to the compiler command line used to build the embedded application. The purpose is to always generate a stack frame that is compliant with the ARM Procedure Call Standard for all functions, even if this is not strictly necessary for correct execution of the code.
 
@@ -45,7 +45,7 @@ This section is intended to developers that plan to include DRTM in their own GD
 The source files are available from [GitHub](https://github.com/micro-os-plus/drtm):
 
 ```
-@ git clone https://github.com/micro-os-plus/drtm.git drtm.git
+$ git clone https://github.com/micro-os-plus/drtm.git drtm.git
 ```
 
 The library is also available from the npm registry:
@@ -105,15 +105,15 @@ This template adapts the DRTM to the actual application, for things like reading
 
 The usual implementation is a stateless class, but DRTM takes the safer path and instantiates this class, in case you need to keep state, like pointers to objects, forwarders, etc.
 
-##### Variable argument functions
+* Variable argument functions
 
 The `v*` versions of the output functions implement the variable argument specialisation. If similar `var_args` variants of the output/logging system functions are available, forward the calls to them. If not, use a temporary buffer, perform the formatting with `vsnprintf()` and send the final string to the output/logger (please check the sample implementation of `output_warning()` for a functional version).
 
-##### Type specialisations for read/write
+* Type specialisations for read/write
 
 The minimum requirement is to have a pair a functions that read/write a byte array. If specialised functions are already available, forward the calls to them, otherwise implement the endianness conversions in the backend template, as shown in the sample implementation.
 
-##### The symbols table
+* The symbols table
 
 Regardless of the actual implementation, the only way GDB can construct the list of threads is by reading specific locations in the target memory. The addresses of these locations are generally provided by the linker, as the values of some public/global symbols, so the GDB server needs a method to get the values of certain symbols from the debugged ELD.
 
@@ -138,7 +138,7 @@ In the sample implementation, all definitions relating to the applications are g
 
 Being a header only library, DRTM itself does not have any source files (well, except of the `version.c` file, which is not actually used).
 
-According to C++ specifications, templates are automatically instantiated by the compiler, when needed. To make things more clear, explicit instantiation is used in the `drtm.cpp` file, which implements the C wrapper.
+According to current C++ specifications, templates are automatically instantiated by the compiler, when needed. To make things more clear, explicit instantiation is used in the `drtm.cpp` file, which implements the C wrapper.
 
 ## License
 

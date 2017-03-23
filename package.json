@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "description": "An xPack with the Debug Run-Time Metadata library",
   "scripts": {
-    "test": "bash scripts/xmake.sh tests",
+    "test": "bash scripts/xmake.sh tests --verbose",
     "version": "bash scripts/version.sh"
   },
   "repository": {

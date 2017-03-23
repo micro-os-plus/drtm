@@ -136,7 +136,7 @@ In the sample implementation, all definitions relating to the applications are g
 
 #### The template instantiations
 
-Being a header only library, DRTM itself does not have any source files (well, except of the `version.c` file, which is not actually used).
+Being a header only library, DRTM itself does not have any source files (well, except the `version.c` file, which is not actually used).
 
 According to current C++ specifications, templates are automatically instantiated by the compiler, when needed. To make things more clear, explicit instantiation is used in the `drtm.cpp` file, which implements the C wrapper.
 

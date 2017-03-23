@@ -158,7 +158,7 @@ namespace drtm
 
             // Get the address of the name string.
             int ret;
-            addr_t name_addr;
+            addr_t name_addr = 0;
             ret = backend_.read_long (
                 thread_addr + metadata_.thread.name_offset, &name_addr);
             if (ret < 0)
@@ -167,7 +167,7 @@ namespace drtm
               }
 
             addr_t addr;
-            uint8_t b;
+            uint8_t b = 0;
 
             // Copy the name, byte by byte. A large array copy is risky, since the
             // thread might be allocated right at the end of RAM, and
@@ -234,7 +234,7 @@ namespace drtm
 
             th->stack.addr = backend_.load_long (&th->stack.sp_addr[0]);
 
-            uint32_t exc_return;
+            uint32_t exc_return = 0;
             ret = backend_.read_long (
                 th->stack.addr
                     + (metadata_.thread.stack_exc_offset_words
@@ -377,7 +377,7 @@ namespace drtm
 #endif /* defined(DEBUG) */
 
         list_node_addr_t list_node_addr = children_threads_get_list (ta);
-        iterator it;
+        iterator it = 0;
         int ret;
         ret = backend_.read_long (
             list_node_addr + metadata_.list_links.next_offset, &it);

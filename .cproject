@@ -287,6 +287,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="samples"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="tests/sample"/>
 					</sourceEntries>
@@ -310,7 +311,13 @@
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.macosx.lib.debug.94359825.900821903.134943586;cdt.managedbuild.config.macosx.lib.debug.94359825.900821903.134943586.;cdt.managedbuild.tool.gnu.c.compiler.macosx.lib.debug.784696555;cdt.managedbuild.tool.gnu.c.compiler.input.36376676">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.macosx.lib.debug.94359825;cdt.managedbuild.config.macosx.lib.debug.94359825.;cdt.managedbuild.tool.gnu.cpp.compiler.macosx.lib.debug.192633754;cdt.managedbuild.tool.gnu.cpp.compiler.input.134662126">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.macosx.lib.debug.94359825.900821903.134943586;cdt.managedbuild.config.macosx.lib.debug.94359825.900821903.134943586.;cdt.managedbuild.tool.gnu.cpp.compiler.macosx.lib.debug.1850295085;cdt.managedbuild.tool.gnu.cpp.compiler.input.870758984">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.macosx.lib.debug.94359825.900821903;cdt.managedbuild.config.macosx.lib.debug.94359825.900821903.;cdt.managedbuild.tool.gnu.cpp.compiler.macosx.lib.debug.251661439;cdt.managedbuild.tool.gnu.cpp.compiler.input.2017035557">

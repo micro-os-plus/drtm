@@ -54,13 +54,13 @@ namespace drtm
 
       using thread_addr_t = typename thread_type::thread_addr_t;
 
-      using addr_t = target_addr_t;
+      using addr_t = ::drtm::target_addr_t;
 
       // Address of a target list node.
-      using list_node_addr_t = target_addr_t;
+      using list_node_addr_t = ::drtm::target_addr_t;
 
       // Target iterator, an object that includes a single target pointer.
-      using iterator = target_addr_t;
+      using iterator = ::drtm::target_addr_t;
 
       // Make a new allocator, for characters.
       using char_allocator_type =
@@ -70,10 +70,10 @@ namespace drtm
 
       run_time_data (backend_type& backend, metadata_type& metadata,
                      threads_type& threads, allocator_type& allocator) :
-          backend_ ( backend ), // Parenthesis used to compile with 4.8
-          metadata_ ( metadata ), //
-          threads_ ( threads ), //
-          allocator_ ( allocator )
+          backend_ (backend), // Parenthesis used to compile with 4.8
+          metadata_ (metadata), //
+          threads_ (threads), //
+          allocator_ (allocator)
       {
 #if defined(DEBUG)
         printf ("%s(%p, %p, %p) @%p\n", __func__, &backend, &metadata,

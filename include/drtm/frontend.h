@@ -60,8 +60,8 @@ namespace drtm
     public:
 
       frontend (backend_type& backend, allocator_type& allocator) :
-          backend_ ( backend ), // Parenthesis used to compile with 4.8
-          allocator_ ( allocator )
+          backend_ (backend), // Parenthesis used to compile with 4.8
+          allocator_ (allocator)
       {
 #if defined(DEBUG)
         printf ("%s(%p, %p) @%p\n", __func__, &backend, &allocator, this);
@@ -138,7 +138,7 @@ namespace drtm
        *
        * @return The number of threads.
        */
-      uint32_t
+      std::size_t
       get_threads_count (void)
       {
 #if defined(DEBUG)
@@ -172,15 +172,15 @@ namespace drtm
        * @return The ID of the thread.
        */
       thread_id_t
-      get_thread_id (uint32_t index)
+      get_thread_id (size_t index)
       {
 #if defined(DEBUG)
-        printf ("%s(%u)\n", __func__, index);
+        printf ("%s(%zu)\n", __func__, index);
 #endif /* defined(DEBUG) */
 
         assert(index < threads_.size ());
 #if defined(DEBUG)
-        printf ("%s(%u)=%u\n", __func__, index, threads_[index]->id ());
+        printf ("%s(%zu)=%u\n", __func__, index, threads_[index]->id ());
 #endif /* defined(DEBUG) */
 
         return threads_[index]->id ();
@@ -245,7 +245,8 @@ namespace drtm
        * @return The length of the name string.
        */
       int
-      get_thread_description (thread_id_t tid, char* out_description)
+      get_thread_description (thread_id_t tid, char* out_description,
+                              std::size_t out_size_bytes)
       {
 #if defined(DEBUG)
         printf ("%s(*, %u)\n", __func__, tid);
@@ -290,18 +291,18 @@ namespace drtm
        * @retval <0 Reading register failed.
        */
       int
-      get_thread_register (thread_id_t tid, uint32_t reg_index,
-                           char* out_hex_value)
+      get_thread_register (thread_id_t tid, std::size_t reg_index,
+                           char* out_hex_value, std::size_t out_size_bytes)
       {
 #if defined(DEBUG)
-        printf ("%s(*, %u, %u)\n", __func__, reg_index, tid);
+        printf ("%s(*, %zu, %u)\n", __func__, reg_index, tid);
 #endif /* defined(DEBUG) */
 
         if (!is_scheduler_started_)
           {
             // No scheduler, GDB should use current registers.
 #if defined(DEBUG)
-            printf ("%s(*, %u, %u)=-1 no scheduler\n", __func__, reg_index,
+            printf ("%s(*, %zu, %u)=-1 no scheduler\n", __func__, reg_index,
                     tid);
 #endif /* defined(DEBUG) */
             return -1;
@@ -311,7 +312,7 @@ namespace drtm
           {
             // Current thread, GDB should use current CPU registers.
 #if defined(DEBUG)
-            printf ("%s(*, %u, %u)=-1 current thread\n", __func__, reg_index,
+            printf ("%s(*, %zu, %u)=-1 current thread\n", __func__, reg_index,
                     tid);
 #endif /* defined(DEBUG) */
             return -1;
@@ -344,7 +345,7 @@ namespace drtm
           }
 
         int ret = -1;
-        printf ("%s(*, %u, %u)=%d outside range\n", __func__, reg_index, tid,
+        printf ("%s(*, %zu, %u)=%d outside range\n", __func__, reg_index, tid,
                 ret);
 
         return ret;
@@ -366,7 +367,8 @@ namespace drtm
        * @retval <0 Reading register failed.
        */
       int
-      get_thread_registers (thread_id_t tid, char* out_hex_values)
+      get_thread_registers (thread_id_t tid, char* out_hex_values,
+                            std::size_t out_size_bytes)
       {
 #if defined(DEBUG)
         printf ("%s(*, %u)\n", __func__, tid);
@@ -434,19 +436,19 @@ namespace drtm
        * @retval <0 Writing register failed.
        */
       int
-      set_thread_register (thread_id_t tid, uint32_t reg_index,
+      set_thread_register (thread_id_t tid, std::size_t reg_index,
                            const char* hex_value)
       {
 #if defined(DEBUG)
-        printf ("%s(\"%s\", %u, %u)\n", __func__, hex_value, reg_index, tid);
+        printf ("%s(\"%s\", %zu, %u)\n", __func__, hex_value, reg_index, tid);
 #endif /* defined(DEBUG) */
 
         if (!is_scheduler_started_)
           {
             // No scheduler, GDB should set current registers.
 #if defined(DEBUG)
-            printf ("%s(\"%s\", %u, %u)=-1 no scheduler\n", __func__, hex_value,
-                    reg_index, tid);
+            printf ("%s(\"%s\", %zu, %u)=-1 no scheduler\n", __func__,
+                    hex_value, reg_index, tid);
 #endif /* defined(DEBUG) */
             return -1;
           }
@@ -455,7 +457,7 @@ namespace drtm
           {
             // Current thread, GDB should set current CPU registers.
 #if defined(DEBUG)
-            printf ("%s(\"%s\", %u, %u)=-1 current thread\n", __func__,
+            printf ("%s(\"%s\", %zu, %u)=-1 current thread\n", __func__,
                     hex_value, reg_index, tid);
 #endif /* defined(DEBUG) */
             return -1;

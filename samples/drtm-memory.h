@@ -46,6 +46,8 @@
 
 #include <stdio.h>
 
+#include <your-application.h>
+
 #if defined(__cplusplus)
 
 #include <drtm/memory.h>
@@ -56,14 +58,6 @@ namespace your_namespace
 {
   namespace drtm
   {
-
-#if defined(USE_STATIC_ALLOCATOR)
-
-    extern void*
-    your_application_malloc (std::size_t);
-
-    extern void
-    your_application_free (void*);
 
     /**
      * @brief A standard allocator that allocates memory via
@@ -128,7 +122,7 @@ namespace your_namespace
                   std::error_code (EINVAL, std::system_category ()));
             }
 
-          value_type*p = static_cast<value_type*> (your_application_malloc (
+          value_type*p = static_cast<value_type*> (yapp_malloc (
               objects * sizeof(value_type)));
 
 #if defined(DEBUG)
@@ -149,7 +143,7 @@ namespace your_namespace
 #endif /* defined(DEBUG) */
 
           assert(objects <= max_size ());
-          your_application_free (p);
+          yapp_free (p);
         }
 
         /**
@@ -171,125 +165,6 @@ namespace your_namespace
 
         // None.
       };
-
-#else
-
-    /**
-     * @brief A standard allocator that allocates memory via
-     * the backend memory management functions.
-     *
-     * @tparam T type of allocator values
-     * @tparam S type of the server API, if any.
-     */
-    template<typename T, typename S>
-    class allocator
-      {
-      public:
-
-        // Standard types.
-        using value_type = T;
-
-        // Custom type.
-        using server_api_type = S;
-
-      public:
-
-        /**
-         * @brief Construct an allocator object instance.
-         */
-        allocator (const server_api_type* api) noexcept
-          {
-#if defined(DEBUG)
-            printf ("%s(%p) @%p\n", __func__, api, this);
-#endif /* defined(DEBUG) */
-
-            api_ = api;
-          }
-
-        /**
-         * @brief Copy construct an allocator object instance.
-         */
-        allocator (allocator const & a) = default;
-
-        /**
-         * @brief Construct a sibling allocator object instance, of a different type.
-         */
-        template<typename U>
-        allocator (allocator<U, S> const & other, const server_api_type* api) noexcept
-          {
-            api_ = api;
-          }
-
-        /**
-         * @brief Assign an allocator object instance.
-         */
-        allocator&
-        operator= (allocator const & a) = default;
-
-        /**
-         * @brief Allocate a number of objects of the allocator type.
-         */
-        value_type*
-        allocate (std::size_t objects)
-          {
-#if defined(DEBUG)
-            printf ("%s(%zu) %p\n", __func__, objects, this);
-#endif /* defined(DEBUG) */
-
-            if (objects > max_size ())
-              {
-                throw std::system_error (
-                    std::error_code (EINVAL, std::system_category ()));
-              }
-
-            value_type*p = static_cast<value_type*> (api_->malloc (
-                    objects * sizeof(value_type)));
-
-#if defined(DEBUG)
-            printf ("%s(%zu)=%p %p\n", __func__, objects, p, this);
-#endif /* defined(DEBUG) */
-
-            return p;
-          }
-
-        /**
-         * @brief Deallocate the number of objects.
-         */
-        void
-        deallocate (value_type* p, std::size_t objects) noexcept
-          {
-#if defined(DEBUG)
-            printf ("%s(%p,%zu) %p\n", __func__, p, objects, this);
-#endif /* defined(DEBUG) */
-
-            assert(objects <= max_size ());
-            api_->free (p);
-          }
-
-        /**
-         * @brief Get the maximum number of objects that can be allocated.
-         */
-        std::size_t
-        max_size (void) const noexcept
-          {
-            return std::numeric_limits<std::size_t>::max () / sizeof(value_type);
-          }
-
-        allocator
-        select_on_container_copy_construction (void) const noexcept
-          {
-            return allocator (api_);
-          }
-
-      private:
-
-        /**
-         * @brief Pointer to backend forwarders, if any.
-         */
-        const server_api_type* api_;
-      };
-
-#endif
 
     ;
   // Avoid formatter bug

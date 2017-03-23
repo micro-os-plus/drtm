@@ -28,13 +28,13 @@
 #ifndef DRTM_METADATA_H_
 #define DRTM_METADATA_H_
 
+#define DRTM_SYMBOL_NAME    "os_rtos_drtm"
+
 #if defined(__cplusplus)
 
 #include <drtm/types.h>
 
 #include <cstring>
-
-#define DRTM_SYMBOL_NAME    "os_rtos_drtm"
 
 // Debug Run Time Information v0.1.x offsets.
 
@@ -66,8 +66,8 @@ namespace drtm
       using backend_type = B;
 
       // These come from types.h
-      using addr_t = target_addr_t;
-      using offset_t = target_offset_t;
+      using addr_t = ::drtm::target_addr_t;
+      using offset_t = ::drtm::target_offset_t;
 
     public:
 

@@ -64,12 +64,12 @@ namespace drtm
       using allocator_type = A;
 
       // This comes from types.h
-      using addr_t = target_addr_t;
+      using addr_t = ::drtm::target_addr_t;
 
       // Address of a target thread.
       using thread_addr_t = addr_t;
 
-      using thread_id_t = uint32_t;
+      using thread_id_t = ::drtm::thread_id_t;
 
     public:
 
@@ -88,8 +88,8 @@ namespace drtm
        * @brief Construct a thread object instance.
        */
       thread (backend_type& backend, allocator_type& allocator) :
-          backend_ ( backend ), // Parenthesis used to compile with 4.8
-          allocator_ ( allocator )
+          backend_ (backend), // Parenthesis used to compile with 4.8
+          allocator_ (allocator)
       {
 #if defined(DEBUG)
         printf ("%s(%p, %p) @%p\n", __func__, &backend, &allocator, this);
@@ -381,8 +381,8 @@ namespace drtm
        * @brief Construct the threads collection object instance.
        */
       threads (backend_type& backend, allocator_type& allocator) :
-          backend_ ( backend ), // Parenthesis used to compile with 4.8
-          allocator_ ( allocator )
+          backend_ (backend), // Parenthesis used to compile with 4.8
+          allocator_ (allocator)
       {
 #if defined(DEBUG)
         printf ("%s(%p, %p) @%p\n", __func__, &backend, &allocator, this);

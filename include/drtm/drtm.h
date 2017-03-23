@@ -30,13 +30,17 @@
 
 #include <stdio.h>
 
-#if defined(__cplusplus)
+#include <drtm/version.h>
 
 #include <drtm/types.h>
 #include <drtm/frontend.h>
 #include <drtm/metadata.h>
 #include <drtm/run-time-data.h>
 #include <drtm/threads.h>
+
+#include <drtm/c-api.h>
+
+#if defined(__cplusplus)
 
 namespace drtm
 {

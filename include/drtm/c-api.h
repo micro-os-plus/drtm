@@ -25,45 +25,62 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef DRTM_TYPES_H_
-#define DRTM_TYPES_H_
+#ifndef DRTM_C_API_H_
+#define DRTM_C_API_H_
+
+#include <stdint.h>
+#include <stddef.h>
 
 #if defined(__cplusplus)
-
-#include <drtm/c-api.h>
-
-#include <cstdint>
-
-namespace drtm
+extern "C"
 {
-
-  // Generic target address.
-  using target_addr_t = drtm_target_addr_t;
-  using thread_id_t = drtm_thread_id_t;
-  using target_offset_t = uint16_t;
-
-  // ---
-
-  // RTOS symbols.
-  typedef struct symbols_s
-  {
-    const char *name = nullptr;
-    int optional = 0;
-    target_addr_t address = 0;
-  } symbols_t;
-
-  typedef int8_t register_offset_t;
-  typedef struct stack_info_s
-  {
-    uint32_t in_registers;
-    uint32_t out_registers;
-    const register_offset_t* offsets;
-    uint32_t offsets_size;
-  } stack_info_t;
-
-// ----------------------------------------------------------------------------
-} /* namespace drtm */
-
 #endif /* defined(__cplusplus) */
 
-#endif /* DRTM_TYPES_H_ */
+  // Generally these definitions must be kept in sync
+  // with the ones in the application.
+  // C++ definitions also use them.
+  typedef uint32_t drtm_thread_id_t;
+  typedef uint32_t drtm_target_addr_t;
+
+  int
+  drtm_init (void);
+
+  void
+  drtm_shutdown (void);
+
+  int
+  drtm_update_thread_list (void);
+
+  size_t
+  drtm_get_threads_count (void);
+
+  drtm_thread_id_t
+  drtm_get_thread_id (size_t index);
+
+  drtm_thread_id_t
+  drtm_get_current_thread_id (void);
+
+  int
+  drtm_get_thread_description (drtm_thread_id_t tid, char* out_description,
+                               size_t out_size_bytes);
+
+  int
+  drtm_get_thread_register (drtm_thread_id_t tid, size_t reg_index,
+                            char* out_hex_value, size_t out_size_bytes);
+
+  int
+  drtm_get_thread_registers (drtm_thread_id_t tid, char* out_hex_values,
+                             size_t out_size_bytes);
+
+  int
+  drtm_set_thread_register (drtm_thread_id_t tid, size_t reg_index,
+                            const char* hex_value);
+
+  int
+  drtm_set_thread_registers (drtm_thread_id_t tid, const char* hex_values);
+
+#if defined(__cplusplus)
+}
+#endif /* defined(__cplusplus) */
+
+#endif /* DRTM_C_API_H_ */

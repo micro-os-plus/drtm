@@ -19,7 +19,7 @@ This test is automatically executed part of the xPack tests; both profiles (`deb
 
 To run the test individually, use
 
-```
+```bash
 $ bash ../../scripts/xmake.sh test sample [--verbose]
 ```
 
@@ -27,7 +27,7 @@ The executable is also executed.
 
 To clean a build:
 
-```
+```bash
 $ bash ../../scripts/xmake.sh test sample [--verbose] -- clean
 ```
 

@@ -46,13 +46,13 @@ This section is intended to developers that plan to include DRTM in their own GD
 
 The source files are available from [GitHub](https://github.com/micro-os-plus/drtm):
 
-```
+```bash
 $ git clone https://github.com/micro-os-plus/drtm.git drtm.git
 ```
 
 The library is also available from the npm registry:
 
-```
+```bash
 $ npm install @ilg/drtm
 ```
 
@@ -71,21 +71,21 @@ Special care was taken to avoid compiler warnings. For this the tests were compi
 
 As for any xPack, the standard way to run the project tests is via `npm`:
 
-```
+```bash
 $ cd drtm.git
 $ npm test
 ```
 
 The tests can also be exectuted directly, without `npm`:
 
-```
+```bash
 $ cd drtm.git
 $ bash scripts/xmake.sh tests 
 ```
 
 To clean the previous test builds, use:
 
-```
+```bash
 $ cd drtm.git
 $ bash scripts/xmake.sh tests -- clean
 ```

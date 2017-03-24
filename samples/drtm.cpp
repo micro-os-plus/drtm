@@ -32,6 +32,9 @@
 #include <drtm-backend.h>
 #include <drtm-memory.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
+
 // ---------------------------------------------------------------------------
 // Templates.
 
@@ -72,6 +75,8 @@ template class drtm::frontend<backend_type, backend_allocator_type>;
 // Define a type alias.
 using frontend_type = class drtm::frontend<backend_type, backend_allocator_type>;
 
+#pragma GCC diagnostic pop
+
 // ---------------------------------------------------------------------------
 // The C API.
 
@@ -87,22 +92,24 @@ int
 drtm_init (void)
 {
   // Allocate space for the DRTM allocator object instance.
-  drtm_.allocator = (backend_allocator_type*) yapp_malloc (
-      sizeof(backend_allocator_type));
+  drtm_.allocator = reinterpret_cast<backend_allocator_type*> (yapp_malloc (
+      sizeof(backend_allocator_type)));
 
   // Construct the already allocated DRTM allocator object instance.
   new (drtm_.allocator) backend_allocator_type
     { };
 
   // Allocate space for the DRTM backend object instance.
-  drtm_.backend = (backend_type*) yapp_malloc (sizeof(backend_type));
+  drtm_.backend = reinterpret_cast<backend_type*> (yapp_malloc (
+      sizeof(backend_type)));
 
   // Construct the already allocated DRTM backend object instance.
   new (drtm_.backend) backend_type
     { yapp_symbols };
 
   // Allocate space for the DRTM frontend object instance.
-  drtm_.frontend = (frontend_type*) yapp_malloc (sizeof(frontend_type));
+  drtm_.frontend = reinterpret_cast<frontend_type*> (yapp_malloc (
+      sizeof(frontend_type)));
 
   // Construct the already allocated DRTM frontend object instance.
   new (drtm_.frontend) frontend_type
@@ -152,7 +159,7 @@ drtm_get_current_thread_id (void)
   return drtm_.frontend->get_current_thread_id ();
 }
 
-int
+size_t
 drtm_get_thread_description (drtm_thread_id_t tid, char* out_description,
                              size_t out_size_bytes)
 {

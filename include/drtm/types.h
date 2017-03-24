@@ -37,22 +37,15 @@
 namespace drtm
 {
 
-  // Generic target address.
-  using target_addr_t = drtm_target_addr_t;
-  using thread_id_t = drtm_thread_id_t;
   using target_offset_t = uint16_t;
 
-  // ---
+  // --------------------------------------------------------------------------
 
-  // RTOS symbols.
-  typedef struct symbols_s
-  {
-    const char *name = nullptr;
-    int optional = 0;
-    target_addr_t address = 0;
-  } symbols_t;
+  using register_offset_t = int8_t;
 
-  typedef int8_t register_offset_t;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
+
   typedef struct stack_info_s
   {
     uint32_t in_registers;
@@ -60,6 +53,8 @@ namespace drtm
     const register_offset_t* offsets;
     uint32_t offsets_size;
   } stack_info_t;
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 } /* namespace drtm */

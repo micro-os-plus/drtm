@@ -1,8 +1,10 @@
-[![npm (scoped)](https://img.shields.io/npm/v/@ilg/drtm.svg)](https://www.npmjs.com/package/@ilg/drtm) [![license](https://img.shields.io/github/license/micro-os-plus/drtm.svg)](https://github.com/micro-os-plus/drtm/blob/xpack/LICENSE) [![Travis](https://img.shields.io/travis/micro-os-plus/drtm.svg)](https://travis-ci.org/micro-os-plus/drtm)
+[![npm (scoped)](https://img.shields.io/npm/v/@ilg/drtm.svg)](https://www.npmjs.com/package/@ilg/drtm) 
+[![license](https://img.shields.io/github/license/micro-os-plus/drtm.svg)](https://github.com/micro-os-plus/drtm/blob/xpack/LICENSE) 
+[![Travis](https://img.shields.io/travis/micro-os-plus/drtm.svg?label=linux)](https://travis-ci.org/micro-os-plus/drtm)
 
 ## DRTM
 
-An xPack with the Debug Run-Time Metadata library. 
+An xPack with the **D**ebug **R**un-**T**ime **M**etadata library. 
 
 This library provies support for parsing the RTOS specific Debug Run-Time Metadata, used by thread-aware GDB servers. The Debug Run-Time Metadata is stored in the RTOS application flash space; it includes addresses of various scheduler data and offsets inside TCBs (Thread Control Blocks).
 
@@ -57,6 +59,13 @@ $ npm install @ilg/drtm
 ### Prerequisites
 
 The source code require a modern C++ compiler, preferably GCC 5 or higher, but was also compiled with GCC 4.8. Be sure `-std=c++1y` or higher is used when compiling source files that include these templates.
+
+### No warnings
+
+Special care was taken to avoid compiler warnings. For this the tests were compiled with 
+
+- clang `-Weverything -Wno-format-pedantic -Wno-c++98-compat -Wno-c99-extensions -Wno-c++98-compat-pedantic -Wno-documentation-unknown-command` and 
+- GCC 6 `-Wall -Wextra -Wunused -Wuninitialized -Wmissing-declarations -Wconversion -Wpointer-arith -Wshadow -Wlogical-op -Wfloat-equal`
 
 ### Testing
 
@@ -139,6 +148,20 @@ In the sample implementation, all definitions relating to the applications are g
 Being a header only library, DRTM itself does not have any source files (well, except the `version.c` file, which is not actually used).
 
 According to current C++ specifications, templates are automatically instantiated by the compiler, when needed. To make things more clear, explicit instantiation is used in the `drtm.cpp` file, which implements the C wrapper.
+
+## Future developments
+
+The first version (0.x) of the metadata will be a simple structure with various members, so the library will still need to use hard-coded offsets in this structure to access the data.
+ 
+For version 1.x it is planed to improve the structure of the metadata, by using `id:value` pairs, in a sort of **compile-time binary JSON**, so the fixed point will be a list of numeric IDs, not offsets in a structure.
+
+The first versions will focus on describing the metadata specific to µOS++ IIIe, but given that JSONs are generic enough to describe any data structures, it shouldn't be that difficult to describe most of the data types and memory structures in use by popular RTOSes. 
+
+The assumption is that the number of such different data structures used to manage the list of threads is relatively low and manageable, so it should be easier to add a new definition to an existing framework that is already fully functional, than to redo an implementation completely from scratch. And once the DRTM data is in, the result should be directly available to all servers that use the DRTM library (OpenOCD, J-Link, QEMU being on my TODO list).
+
+## Forum
+
+The DRTM proposal was posted on the [project forum](https://www.element14.com/community/thread/59299/l/drtm-debug-run-time-metadata-proposal).
 
 ## License
 

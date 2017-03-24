@@ -51,6 +51,9 @@ namespace your_namespace
   namespace drtm
   {
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
+
     /**
      * This template class provides an implementation for the DRTM backend
      * that forwards calls to the <your application> SDK C API.
@@ -64,7 +67,10 @@ namespace your_namespace
 
         constexpr static std::size_t tmp_buf_size_bytes = 256;
         using symbols_type = S;
-        using target_addr_t = decltype(S::address);
+
+        // Common types; will be propagated where needed.
+        using target_addr_t = yapp_target_addr_t;
+        using thread_id_t = yapp_thread_id_t;
 
       public:
         /**
@@ -161,7 +167,10 @@ namespace your_namespace
         {
           char buf[tmp_buf_size_bytes];
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
           int ret = vsnprintf (buf, sizeof(buf), fmt, args);
+#pragma GCC diagnostic pop
           yapp_output_warning (buf);
 
           return ret;
@@ -192,7 +201,10 @@ namespace your_namespace
         {
           char buf[tmp_buf_size_bytes];
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
           int ret = vsnprintf (buf, sizeof(buf), fmt, args);
+#pragma GCC diagnostic pop
           yapp_output_error (buf);
 
           return ret;
@@ -212,7 +224,7 @@ namespace your_namespace
          *
          * @param [in] addr Target address to read from.
          * @param [out] out_array Pointer to buffer for target memory.
-         * @param [in] nbytes Number of bytes to read.
+         * @param [in] bytes Number of bytes to read.
          *
          * @retval 0 Reading memory OK.
          * @retval <0 Reading memory failed.
@@ -231,7 +243,7 @@ namespace your_namespace
          * If necessary, the target CPU is halted in order to read memory.
          *
          * @param [in] addr Target address to read from.
-         * @param [out] out_byte Pointer to byte.
+         * @param [out] out_value Pointer to byte.
          *
          * @retval 0 Reading memory OK.
          * @retval <0 Reading memory failed.
@@ -329,7 +341,7 @@ namespace your_namespace
          *
          * @param [in] addr Target address to write to.
          * @param [in] out_array Pointer to buffer for target memory.
-         * @param [in] nbytes Number of bytes to write.
+         * @param [in] bytes Number of bytes to write.
          *
          * @retval 0 Writing memory OK.
          * @retval <0 Writing memory failed.
@@ -379,15 +391,15 @@ namespace your_namespace
           uint8_t array[2];
           if (is_target_little_endian ())
             {
-              array[0] = value & 0xFF;
-              value >>= 8;
-              array[1] = value & 0xFF;
+              array[0] = static_cast<uint8_t> (value & 0xFF);
+              value = static_cast<uint16_t> (value >> 8);
+              array[1] = static_cast<uint8_t> (value & 0xFF);
             }
           else
             {
-              array[1] = value & 0xFF;
-              value >>= 8;
-              array[0] = value & 0xFF;
+              array[1] = static_cast<uint8_t> (value & 0xFF);
+              value = static_cast<uint16_t> (value >> 8);
+              array[0] = static_cast<uint8_t> (value & 0xFF);
             }
           write_byte_array (addr, &array[0], 2);
         }
@@ -501,14 +513,14 @@ namespace your_namespace
           if (is_target_little_endian ())
             {
               val = p[1];
-              val <<= 8;
-              val |= p[0];
+              val = static_cast<uint16_t> (val << 8);
+              val = static_cast<uint16_t> (val | p[0]);
             }
           else
             {
               val = p[0];
-              val <<= 8;
-              val |= p[1];
+              val = static_cast<uint16_t> (val << 8);
+              val = static_cast<uint16_t> (val | p[1]);
             }
           return val;
         }
@@ -605,6 +617,8 @@ namespace your_namespace
 
         const symbols_type* symbols_;
       };
+
+#pragma GCC diagnostic pop
 
     ;
   // Avoid formatter bug

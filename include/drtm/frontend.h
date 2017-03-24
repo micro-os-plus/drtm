@@ -239,12 +239,12 @@ namespace drtm
        *
        * @param [in] tid ID of the thread.
        * @param [out] out_description Pointer to the string where the name
-       *  has to be copied to; the space reserved for the name is 256 bytes
-       *  (including terminating zero).
+       *  has to be copied to.
+       * @param [in] out_size_bytes The max size of the output buffer.
        *
        * @return The length of the name string.
        */
-      int
+      std::size_t
       get_thread_description (thread_id_t tid, char* out_description,
                               std::size_t out_size_bytes)
       {
@@ -255,10 +255,10 @@ namespace drtm
         assert(out_description != NULL);
 
         thread_type* td = threads_.thread (tid);
-        int count = 0;
+        std::size_t count = 0;
         if (is_scheduler_started_ && td != nullptr)
           {
-            count = td->prepare_description (out_description);
+            count = td->prepare_description (out_description, out_size_bytes);
           }
         else
           {
@@ -286,6 +286,7 @@ namespace drtm
        * @param [in] reg_index Index of the register.
        * @param [out] out_hex_value Pointer to the string, the value has
        *  to be copied to.
+       * @param [in] out_size_bytes The max size of the output buffer.
        *
        * @retval 0 Reading register OK.
        * @retval <0 Reading register failed.
@@ -335,7 +336,7 @@ namespace drtm
             printf ("out ");
 #endif /* defined(DEBUG) */
 
-            out = td->output_register (reg_index, out);
+            out += td->output_register (reg_index, out, out_size_bytes);
 
 #if defined(DEBUG)
             printf ("%s \n", out - 8);
@@ -359,9 +360,10 @@ namespace drtm
        * the function must return a value <0. The register values are then
        * read from the CPU by the GDB server itself.
        *
-       * @param [in] thread_id ID of the thread.
+       * @param [in] tid ID of the thread.
        * @param [out] out_hex_values Pointer to the string, the values
        *  have to be copied to.
+       * @param [in] out_size_bytes The max size of the output buffer.
        *
        * @retval 0 Reading registers OK.
        * @retval <0 Reading register failed.
@@ -404,9 +406,13 @@ namespace drtm
         printf ("out ");
 #endif /* defined(DEBUG) */
         char* out = out_hex_values;
+        std::size_t count = 0;
+        std::size_t ret;
         for (std::size_t i = 0; i < th->stack.info->out_registers; ++i)
           {
-            out = th->output_register (i, out);
+            ret = th->output_register (i, out, out_size_bytes - count);
+            count += ret;
+            out += ret;
 
 #if defined(DEBUG)
             printf ("%s ", out - 8);
@@ -427,7 +433,7 @@ namespace drtm
        * the function must return a value <0. The register value is then
        * written to the CPU by the GDB server itself.
        *
-       * @param [in] thread_id ID of the thread.
+       * @param [in] tid ID of the thread.
        * @param [in] reg_index Index of the register.
        * @param [in] hex_value Pointer to the string, containing
        *  the value to write.
@@ -478,7 +484,7 @@ namespace drtm
        * the function must return a value <0. The register values are
        * then written to the CPU by the GDB server itself.
        *
-       * @param [in] thread_id ID of the thread.
+       * @param [in] tid ID of the thread.
        * @param [in] hex_values Pointer to the string, containing the
        *  values to write.
        *
@@ -517,11 +523,6 @@ namespace drtm
                                  ret);
         return ret;
       }
-
-    private:
-
-      // ----------------------------------------------------------------------
-      // Support functions.
 
       // ----------------------------------------------------------------------
 

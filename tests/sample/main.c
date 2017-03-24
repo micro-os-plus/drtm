@@ -32,7 +32,7 @@
 #include <drtm/drtm.h>
 
 int
-main (int argc, char* argv[])
+main (int argc __attribute__((unused)), char* argv[] __attribute__((unused)))
 {
   printf ("DRTM library, v%d.%d.%d build test\n",
   XPACK_ILG_DRTM_VERSION_MAJOR,
@@ -76,7 +76,7 @@ main (int argc, char* argv[])
 yapp_symbols_t yapp_symbols[] =
   {
     { .name = "DRTM_SYMBOL_NAME" },
-    { }
+    { 0, 0 }
   /**/
   };
 
@@ -84,6 +84,10 @@ yapp_symbols_t yapp_symbols[] =
 
 // Functions with similar prototypes should be already available in
 // your application, use them directly and adjust the backend template.
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
 
 int
 yapp_voutput (const char* fmt, va_list args)
@@ -139,6 +143,8 @@ yapp_write_byte_array (yapp_target_addr_t addr, const uint8_t* out_array,
   // Return 0 if ok, <0 if error.
   return 0;
 }
+
+#pragma GCC diagnostic pop
 
 void*
 yapp_malloc (size_t bytes)

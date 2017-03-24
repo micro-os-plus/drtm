@@ -45,6 +45,10 @@
 
 namespace drtm
 {
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
+
   /**
    * @brief A class template to store the information related to a thread.
    *
@@ -64,12 +68,12 @@ namespace drtm
       using allocator_type = A;
 
       // This comes from types.h
-      using addr_t = ::drtm::target_addr_t;
+      using addr_t = typename backend_type::target_addr_t;
 
       // Address of a target thread.
       using thread_addr_t = addr_t;
 
-      using thread_id_t = ::drtm::thread_id_t;
+      using thread_id_t = typename backend_type::thread_id_t;
 
     public:
 
@@ -120,12 +124,18 @@ namespace drtm
 
       // Accessors and mutators.
 
+      /**
+       * @brief Get the thread address.
+       */
       inline addr_t
       addr ()
       {
         return addr_;
       }
 
+      /**
+       * @brief Set the thread address.
+       */
       void
       addr (addr_t a)
       {
@@ -141,18 +151,27 @@ namespace drtm
         id_ = (addr_ >> 2);
       }
 
+      /**
+       * @brief Get the thread ID.
+       */
       inline thread_id_t
       id ()
       {
         return id_;
       }
 
+      /**
+       * @brief Set the thread ID.
+       */
       inline void
       id (thread_id_t tid)
       {
         id_ = tid;
       }
 
+      /**
+       * @brief Clear the thread object instance content, for reuse.
+       */
       void
       clear (void)
       {
@@ -160,7 +179,7 @@ namespace drtm
         printf ("%s() @%p\n", __func__, this);
 #endif /* defined(DEBUG) */
 
-        // DO NOT clear the entire object, this will destroy references;
+        // DO NOT `memset()` the entire object, this will destroy references;
         // instead, clear individual members.
         addr_ = 0;
         id_ = 0;
@@ -183,8 +202,8 @@ namespace drtm
        *
        * @return Number of characters in description, excluding '\0'.
        */
-      int
-      prepare_description (char* out_description)
+      std::size_t
+      prepare_description (char* out_description, std::size_t out_size_bytes)
       {
         const char* st;
         if (state < sizeof(thread_states) / sizeof(thread_states[0]))
@@ -196,27 +215,35 @@ namespace drtm
             st = "?";
           }
 
-        int count = 0;
+        std::size_t count = 0;
         char* out = out_description;
+        int ret;
 
-        count += snprintf (out + count, 256 - count, "%s [S:%s, P:", name, st);
+        ret = snprintf (out + count, out_size_bytes - count, "%s [S:%s, P:",
+                        name, st);
+        count += static_cast<std::size_t> (ret);
 
         if (prio_inherited > prio_assigned)
           {
-            count += snprintf (out + count, 256 - count, "%u(%u)",
-                               prio_inherited, prio_assigned);
+            ret = snprintf (out + count, out_size_bytes - count, "%u(%u)",
+                            prio_inherited, prio_assigned);
+            count += static_cast<std::size_t> (ret);
           }
         else
           {
-            count += snprintf (out + count, 256 - count, "%u", prio_assigned);
+            ret = snprintf (out + count, out_size_bytes - count, "%u",
+                            prio_assigned);
+            count += static_cast<std::size_t> (ret);
           }
 
         if (stack.is_floating_point)
           {
-            count += snprintf (out + count, 256 - count, ", FP");
+            ret = snprintf (out + count, out_size_bytes - count, ", FP");
+            count += static_cast<std::size_t> (ret);
           }
 
-        count += snprintf (out + count, 256 - count, "]");
+        ret = snprintf (out + count, out_size_bytes - count, "]");
+        count += static_cast<std::size_t> (ret);
 
         return count;
       }
@@ -228,32 +255,44 @@ namespace drtm
        *
        * @return The next free position in the output string.
        */
-      char*
-      output_register (uint32_t reg_index, char* out)
+      std::size_t
+      output_register (std::size_t reg_index, char* out,
+                       std::size_t out_size_bytes)
       {
         assert(stack.info != nullptr);
-        for (int j = 0; j < 4; ++j)
+        std::size_t count = 0;
+        int ret;
+        for (std::size_t j = 0; j < 4; ++j)
           {
+            if (count + 3 >= out_size_bytes)
+              {
+                break;
+              }
             register_offset_t offset = stack.info->offsets[reg_index];
             if (offset == -1)
               {
-                out += snprintf (out, 3, "%02X", 0);
+                ret = snprintf (out, 3, "%02X", 0);
               }
             else if (offset == -2)
               {
                 // SP is displayed separately, not from the thread context,
                 // but from the TCB, it is fetched for each thread.
-                out += snprintf (out, 3, "%02X", stack.sp_addr[j]);
+                ret = snprintf (out, 3, "%02X", stack.sp_addr[j]);
               }
             else
               {
-                out += snprintf (
-                    out, 3, "%02X",
-                    stack.context[offset * register_size_bytes + j]);
+                ret = snprintf (
+                    out,
+                    3,
+                    "%02X",
+                    stack.context[static_cast<std::size_t> (offset)
+                        * register_size_bytes + j]);
               }
+            count += static_cast<std::size_t> (ret);
+            out += ret;
           }
 
-        return out;
+        return count;
       }
 
       // ----------------------------------------------------------------------
@@ -330,7 +369,7 @@ namespace drtm
 
     };
 
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
   /**
    * @brief A class template to manage a collection (an array)
@@ -568,11 +607,13 @@ namespace drtm
       // A collection (vector) of pointers to
       // separately allocated thread objects.
       collection_type threads_
-        { (vector_allocator_type&) allocator_ };
+        { reinterpret_cast<vector_allocator_type&> (allocator_) };
 
     };
 
-  // --------------------------------------------------------------------------
+#pragma GCC diagnostic pop
+
+// --------------------------------------------------------------------------
 
   template<typename B, typename A>
     const char* thread<B, A>::thread_states[6] =

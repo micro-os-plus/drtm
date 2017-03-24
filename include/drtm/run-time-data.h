@@ -39,6 +39,10 @@
 namespace drtm
 {
 
+  /**
+   * A class template to manage the run-time data, like iterate through
+   * the thread lists, tell if scheduler started, etc.
+   */
   template<typename B, typename A>
     class run_time_data
     {
@@ -54,13 +58,13 @@ namespace drtm
 
       using thread_addr_t = typename thread_type::thread_addr_t;
 
-      using addr_t = ::drtm::target_addr_t;
+      using addr_t = typename backend_type::target_addr_t;
 
       // Address of a target list node.
-      using list_node_addr_t = ::drtm::target_addr_t;
+      using list_node_addr_t = addr_t;
 
       // Target iterator, an object that includes a single target pointer.
-      using iterator = ::drtm::target_addr_t;
+      using iterator = addr_t;
 
       // Make a new allocator, for characters.
       using char_allocator_type =
@@ -104,7 +108,7 @@ namespace drtm
 
         int err;
         err = backend_.read_byte (metadata_.scheduler.is_started_addr,
-                                  (uint8_t*) &ret);
+                                  reinterpret_cast<uint8_t*> (&ret));
         if (err < 0)
           {
             backend_.output_error ("Could not read 'is_started'.\n");
@@ -186,7 +190,7 @@ namespace drtm
                             "Could not read 'thread.name'.\n");
                         break;
                       }
-                    *p = b;
+                    *p = static_cast<char> (b);
                     ++p;
                     ++addr;
                     ++count;
@@ -236,9 +240,9 @@ namespace drtm
 
             uint32_t exc_return = 0;
             ret = backend_.read_long (
-                th->stack.addr
+                static_cast<addr_t> (th->stack.addr
                     + (metadata_.thread.stack_exc_offset_words
-                        * thread_type::register_size_bytes),
+                        * thread_type::register_size_bytes)),
                 &exc_return);
             if (ret < 0)
               {
@@ -795,7 +799,6 @@ namespace drtm
       };
 
 // ---------------------------------------------------------------------------
-
 } /* namespace drtm */
 
 #endif /* defined(__cplusplus) */

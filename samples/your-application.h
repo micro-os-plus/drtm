@@ -40,6 +40,10 @@ extern "C"
 
   // Addresses in the target memory space.
   typedef uint32_t yapp_target_addr_t;
+  typedef uint32_t yapp_thread_id_t;
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
 
   // This should be the structure used to query the GDB for symbol values.
   // If your structure has different member names, adjust the backend
@@ -49,6 +53,8 @@ extern "C"
     char* name;
     yapp_target_addr_t address;
   } yapp_symbols_t;
+
+#pragma GCC diagnostic pop
 
   extern yapp_symbols_t yapp_symbols[];
 
@@ -96,6 +102,19 @@ extern "C"
 
 #if defined(__cplusplus)
 }
+#endif /* defined(__cplusplus) */
+
+#if defined(__cplusplus)
+
+namespace drtm
+{
+
+// Generic target address.
+// using target_addr_t = yapp_target_addr_t;
+// using thread_id_t = yapp_thread_id_t;
+
+} /* namespace drtm */
+
 #endif /* defined(__cplusplus) */
 
 #endif /* YOUR_APPLICATION_H_ */

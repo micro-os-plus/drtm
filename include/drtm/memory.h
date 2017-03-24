@@ -151,7 +151,7 @@ namespace drtm
       template<typename U>
         polymorphic_allocator (polymorphic_allocator<U> const & other) noexcept
         {
-          ;
+          mr_ = other.mr_;
         }
 
       polymorphic_allocator&

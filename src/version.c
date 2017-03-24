@@ -27,15 +27,19 @@
 
 #include <drtm/version.h>
 
-struct
+typedef struct version_s
 {
   int major;
   int minor;
   int patch;
-} ilg_drtm_version =
+} version_t;
+
+extern version_t ilg_drtm_version;
+
+version_t ilg_drtm_version =
   {
   //
-      XPACK_ILG_DRTM_VERSION_MAJOR, //
+      XPACK_ILG_DRTM_VERSION_MAJOR,//
       XPACK_ILG_DRTM_VERSION_MINOR, //
       XPACK_ILG_DRTM_VERSION_PATCH
   /**/

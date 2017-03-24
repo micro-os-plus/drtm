@@ -95,9 +95,9 @@ namespace your_namespace
          * for a different type.
          */
         template<typename U>
-          allocator (allocator<U> const & other) noexcept
+          allocator (allocator<U> const & other __attribute__((unused))) noexcept
           {
-            ;
+            ; // No members to copy.
           }
 
         /**

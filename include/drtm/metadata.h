@@ -58,6 +58,10 @@
 
 namespace drtm
 {
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
+
   template<typename B>
     class metadata
     {
@@ -66,7 +70,7 @@ namespace drtm
       using backend_type = B;
 
       // These come from types.h
-      using addr_t = ::drtm::target_addr_t;
+      using addr_t = typename backend_type::target_addr_t;
       using offset_t = ::drtm::target_offset_t;
 
     public:
@@ -121,13 +125,12 @@ namespace drtm
             return false;
           }
 
-        // Set this early, to prevent useless checks if parse fails.
+        // Set this early, to prevent useless checks if parsing fails.
         was_parsed = true;
 
         backend_.read_byte_array (drtm_addr + OS_RTOS_DRTM_OFFSETOF_MAGIC,
                                   &magic[0], sizeof(magic));
-        // backend_->output ("%c%c%c%c\n", drtm_.magic[0], drtm_.magic[1], drtm_.magic[2], drtm_.magic[3]);
-        if (std::strncmp ((char*) &magic[0], "DRTM", 4) != 0)
+        if (std::strncmp (reinterpret_cast<char*> (&magic[0]), "DRTM", 4) != 0)
           {
             backend_.output_error ("DRTM magic not found, abort.\n",
             DRTM_SYMBOL_NAME);
@@ -332,6 +335,8 @@ namespace drtm
       } list_links;
 
     };
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 } /* namespace drtm */

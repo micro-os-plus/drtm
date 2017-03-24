@@ -60,7 +60,7 @@ extern "C"
   drtm_thread_id_t
   drtm_get_current_thread_id (void);
 
-  int
+  size_t
   drtm_get_thread_description (drtm_thread_id_t tid, char* out_description,
                                size_t out_size_bytes);
 

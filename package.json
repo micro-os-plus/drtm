@@ -1,6 +1,6 @@
 {
   "name": "@ilg/drtm",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An xPack with the Debug Run-Time Metadata library",
   "scripts": {
     "test": "bash scripts/xmake.sh tests --verbose",

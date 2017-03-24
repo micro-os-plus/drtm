@@ -52,8 +52,6 @@
 
 #include <drtm/memory.h>
 
-#define USE_STATIC_ALLOCATOR
-
 namespace your_namespace
 {
   namespace drtm

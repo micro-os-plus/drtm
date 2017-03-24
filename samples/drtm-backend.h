@@ -340,17 +340,17 @@ namespace your_namespace
          * If necessary, the target CPU is halted in order to read memory.
          *
          * @param [in] addr Target address to write to.
-         * @param [in] out_array Pointer to buffer for target memory.
+         * @param [in] array Pointer to buffer for target memory.
          * @param [in] bytes Number of bytes to write.
          *
          * @retval 0 Writing memory OK.
          * @retval <0 Writing memory failed.
          */
         inline int
-        write_byte_array (target_addr_t addr, const uint8_t* out_array,
+        write_byte_array (target_addr_t addr, const uint8_t* array,
                           std::size_t bytes)
         {
-          return yapp_write_byte_array (addr, out_array, bytes);
+          return yapp_write_byte_array (addr, array, bytes);
         }
 
         /**

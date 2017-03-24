@@ -34,7 +34,10 @@ typedef struct version_s
   int patch;
 } version_t;
 
-extern version_t ilg_drtm_version;
+#pragma GCC diagnostic push
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wmissing-variable-declarations"
+#endif /* defined(__clang__) */
 
 version_t ilg_drtm_version =
   {
@@ -44,3 +47,5 @@ version_t ilg_drtm_version =
       XPACK_ILG_DRTM_VERSION_PATCH
   /**/
   };
+
+#pragma GCC diagnostic pop

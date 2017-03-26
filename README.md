@@ -76,7 +76,7 @@ $ cd drtm.git
 $ npm test
 ```
 
-The tests can also be exectuted directly, without `npm`:
+The tests can also be executed directly, without `npm`:
 
 ```bash
 $ cd drtm.git
@@ -126,7 +126,7 @@ The minimum requirement is to have a pair a functions that read/write a byte arr
 
 Regardless of the actual implementation, the only way GDB can construct the list of threads is by reading specific locations in the target memory. The addresses of these locations are generally provided by the linker, as the values of some public/global symbols, so the GDB server needs a method to get the values of certain symbols from the debugged ELD.
 
-Depending on the actual implementaion of the GDB server, this might be very simple or somehow tricky.
+Depending on the actual implementation of the GDB server, this might be very simple or somehow tricky.
 
 The idea is that the GDB server, as the name implies, is... a server, i.e. it responds to requests from the GDB client, so it cannot directly call the GDB client (which has the symbols loaded from the ELF file) and ask for the value of a given symbol, and a more elaborate protocol is required.
 
@@ -135,9 +135,9 @@ The details of this protocol, or the details of the implementation, are not rele
 
 #### The memory allocator template
 
-The need to use a custom allocator allocator instead of the standard C++ allocator is related to memory allocator consistency in multi-threaded environments. If the multi-threaded scheduler is preemptive, and the threads do need to allocate memory at any time, a synchronisation mechanism (like a mutex) should be used when accessing the memory allocator. If the allocator in the system library is not thread safe (most moderm POSIX implementations are), but is implementd at application level, than this application specific allocator must be passed to the DRTM library.
+The need to use a custom allocator instead of the standard C++ allocator is related to memory allocator consistency in multi-threaded environments. If the multi-threaded scheduler is preemptive, and the threads do need to allocate memory at any time, a synchronisation mechanism (like a mutex) should be used when accessing the memory allocator. If the allocator in the system library is not thread safe (most moderm POSIX implementations are), but is implemented at application level, then this application specific allocator must be passed to the DRTM library.
 
-As a general recommandation, if the application uses a custom memory manager, pass it to the DRTM library as a custom allocator. If not, do not define a custom allocator but use the `std::allocator`.
+As a general recommendation, if the application uses a custom memory manager, pass it to the DRTM library as a custom allocator. If not, do not define a custom allocator but use the `std::allocator`.
 
 #### The aplication specific header
 

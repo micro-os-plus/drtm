@@ -1,6 +1,6 @@
 {
   "name": "@ilg/drtm",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An xPack with the Debug Run-Time Metadata library",
   "directories": {
     "test": "./tests"

@@ -1,0 +1,55 @@
+{
+  "version": "0.1.0",
+  "name": "sample",
+  "sourceFolders": [
+    ".",
+    "../../src",
+    "../../samples"
+  ],
+  "includeFolders": [
+    ".",
+    "../../include",
+    "../../samples"
+  ],
+  "generator": "make",
+  "commands": {
+    "build": "make",
+    "run": "./${artefactName}"
+  },
+  "profiles": {
+    "debug": {
+      "toolchains": {
+        "gcc": {
+          "common": "-Wall -O0 -g3 -DDEBUG",
+          "c": "",
+          "cpp": "-std=c++1y"
+        }
+      }
+    },
+    "release": {
+      "toolchains": {
+        "gcc": {
+          "common": "-Wall -O3 -g3 -DNDEBUG",
+          "c": "",
+          "cpp": "-std=c++1y"
+        }
+      }
+    }
+  },
+  "toolchains": {
+    "gcc": {
+      "S": "gcc",
+      "c": "gcc",
+      "cpp": "g++",
+      "ld": "g++"
+    }
+  },
+  "targets": {
+    "darwin": {
+      "gcc": {}
+    },
+    "linux": {
+      "gcc": {}
+    }
+  }
+}

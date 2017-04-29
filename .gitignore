@@ -28,8 +28,12 @@
 *.out
 *.app
 
+# -----------------------------------------------------------------------------
+
+# Archives
+/*.tgz
+
 # npm/xpm
-*.tgz
 node_modules/
 xpacks/
 package/
@@ -48,7 +52,9 @@ test-*/
 build/
 
 # Visual Studio Code
-.vscode/
+vscode.mac.command
+
+# other
+work
 
 # end
-work

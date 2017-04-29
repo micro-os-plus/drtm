@@ -2,8 +2,11 @@
   "name": "@ilg/drtm",
   "version": "0.0.5",
   "description": "An xPack with the Debug Run-Time Metadata library",
+  "directories": {
+    "test": "./tests"
+  },
   "scripts": {
-    "test": "bash scripts/xmake.sh tests --verbose",
+    "test": "xmake tests -- clean all",
     "version": "bash scripts/version.sh"
   },
   "repository": {
@@ -26,12 +29,19 @@
     "email": "ilg@livius.net",
     "url": "http://liviusdotnet.wordpress.com"
   },
+  "contributors": [],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/micro-os-plus/drtm/issues"
   },
-  "config": {},
+  "homepage": "https://github.com/micro-os-plus/drtm",
   "dependencies": {},
-  "xpack": {},
-  "homepage": "https://github.com/micro-os-plus/drtm"
+  "devDependencies": {
+    "xmake": "~0.1.3"
+  },
+  "peerDependencies": {},
+  "bundledDependencies": [],
+  "optionalDependencies": {},
+  "config": {},
+  "xpack": {}
 }

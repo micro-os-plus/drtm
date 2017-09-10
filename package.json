@@ -6,7 +6,7 @@
     "test": "./tests"
   },
   "scripts": {
-    "test": "xmake tests -- clean all",
+    "test": "xmake test -- clean all",
     "version": "bash scripts/version.sh"
   },
   "repository": {

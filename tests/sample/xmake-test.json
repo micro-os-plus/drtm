@@ -14,7 +14,14 @@
   "generator": "make",
   "commands": {
     "build": "make",
-    "run": "./${artefactName}"
+    "run": "./${artifact.fullName}"
+  },
+  "artifact": {
+    "type": "executable",
+    "name": "${test.name}",
+    "outputPrefix": "",
+    "outputSuffix": "",
+    "extension": ""
   },
   "profiles": {
     "debug": {
@@ -27,11 +34,40 @@
       }
     },
     "release": {
+      "artifact": {
+        "type": "executable",
+        "name": "${test.name}",
+        "outputPrefix": "",
+        "outputSuffix": "",
+        "extension": ""
+      },
       "toolchains": {
         "gcc": {
           "common": "-Wall -O3 -g3 -DNDEBUG",
           "c": "",
           "cpp": "-std=c++1y"
+        }
+      },
+      "toolchains2": {
+        "gcc": {
+          "options": {
+            "target": "",
+            "debugging": "-g3",
+            "symbols": [
+              "NDEBUG"
+            ],
+            "optimizations": "-O3",
+            "warnings": "-Wall",
+            "miscellaneous": ""
+          },
+          "tools": {
+            "c": {
+              "addOptimizations": "-std=gnu11"
+            },
+            "cpp": {
+              "addOptimizations": "-std=gnu++1y"
+            }
+          }
         }
       }
     }
@@ -50,6 +86,123 @@
     },
     "linux": {
       "gcc": {}
+    }
+  },
+  "targets2": {
+    "darwin": {
+      "profiles": {
+        "debug": {
+          "toolchains": {
+            "gcc": {
+              "options": {
+                "target": "",
+                "debugging": "-g3",
+                "symbols": [
+                  "DEBUG"
+                ],
+                "includes": [],
+                "optimizations": "-O0",
+                "warnings": "-Wall",
+                "miscellaneous": ""
+              },
+              "tools": {
+                "c": {
+                  "addOptimizations": "-std=gnu11"
+                },
+                "cpp": {
+                  "addOptimizations": "-std=gnu++1y"
+                }
+              }
+            }
+          }
+        },
+        "release": {
+          "toolchains": {
+            "gcc": {
+              "artifact": {
+                "type": "executable",
+                "name": "${test.name}",
+                "outputPrefix": "",
+                "outputSuffix": "",
+                "extension": ""
+              },
+              "options": {
+                "target": "",
+                "debugging": "-g3",
+                "symbols": [
+                  "NDEBUG"
+                ],
+                "includes": [],
+                "optimizations": "-O3",
+                "warnings": "-Wall",
+                "miscellaneous": ""
+              },
+              "tools": {
+                "c": {
+                  "addOptimizations": "-std=gnu11"
+                },
+                "cpp": {
+                  "addOptimizations": "-std=gnu++1y"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "linux": {
+      "profiles": {
+        "debug": {
+          "toolchains": {
+            "gcc": {
+              "options": {
+                "target": "",
+                "debugging": "-g3",
+                "symbols": [
+                  "DEBUG"
+                ],
+                "includes": [],
+                "optimizations": "-O0",
+                "warnings": "-Wall",
+                "miscellaneous": ""
+              },
+              "tools": {
+                "c": {
+                  "addOptimizations": "-std=gnu11"
+                },
+                "cpp": {
+                  "addOptimizations": "-std=gnu++1y"
+                }
+              }
+            }
+          }
+        },
+        "release": {
+          "toolchains": {
+            "gcc": {
+              "options": {
+                "target": "",
+                "debugging": "-g3",
+                "symbols": [
+                  "NDEBUG"
+                ],
+                "includes": [],
+                "optimizations": "-O3",
+                "warnings": "-Wall",
+                "miscellaneous": ""
+              },
+              "tools": {
+                "c": {
+                  "addOptimizations": "-std=gnu11"
+                },
+                "cpp": {
+                  "addOptimizations": "-std=gnu++1y"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

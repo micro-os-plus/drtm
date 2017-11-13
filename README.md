@@ -165,5 +165,4 @@ The DRTM proposal was posted on the [project forum](https://www.element14.com/co
 
 ## License
 
-The original content is released under the MIT License, with
-all rights reserved to Liviu Ionescu.
+The original content is released under the [MIT License](https://opensource.org/licenses/MIT), with all rights reserved to [Liviu Ionescu](https://github.com/ilg-ul).
